@@ -1,6 +1,7 @@
 var mysql = require("mysql");
 var inquirer = require("inquirer");
 var quantities = [];
+var prices = [];
 
 var connection = mysql.createConnection({
     host: "localhost",
@@ -14,9 +15,8 @@ connection.connect(function (err) {
     if (err) throw err;
     console.log("connected as id " + connection.threadId + "\r\n");
     displayStock();
+    // console.log("here");
 });
-
-
 
 function displayStock() {
     connection.query("SELECT * FROM products", function (err, res) {
@@ -28,6 +28,7 @@ function displayStock() {
                 res[i].product_name + spaces(res[i].product_name.toString(), 20)
                 + " | " + res[i].price + spaces(res[i].price.toString(), 10) + " | ");
             quantities.push(res[i].stock_quantity);
+            prices.push(res[i].price);
             // console.log("Length: " + res[i].product_name.toString().length);
         }
         // console.log(res);
@@ -68,17 +69,22 @@ function buyItem() {
             var new_quantity = quantities[answer.id - 1] - answer.quantity;
             var answerQuontity = new_quantity.toString();
             var answerID = answer.id.toString();
+            var price = prices[answer.id - 1];
             // console.log("here");
-            connection.query("UPDATE products SET stock_quantity = " + answerQuontity + "WHERE item_id = " +
-                answerID + ";", function (err, results) {
-                    if (err) throw err;
-                }
-            );
+            if ((quantities[answer.id - 1] - answer.quantity) >= 0) {
+                connection.query("UPDATE products SET stock_quantity = " + answerQuontity + " WHERE item_id = " +
+                    answerID + ";", function (err, results) {
+                        if (err) throw err;
+                        console.log("Your total price: $" + price * answer.quantity);
+                    });
+            }
+            else {
+                console.log("Incorrect");
+            }
             // console.log("here");
-
             // console.log("new_quantity: " + new_quantity);
             console.log(new_quantity);
-            console.log("here");
+            // console.log("here");
         });
     // displayStock();
     // connection.end();
