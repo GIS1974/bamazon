@@ -14,31 +14,68 @@ var connection = mysql.createConnection({
 connection.connect(function (err) {
     if (err) throw err;
     console.log("connected as id " + connection.threadId + "\r\n");
-    displayStock();
-    // console.log("here");
+    // inStock();
+    select();
 });
+
+function inStock() {
+    connection.query("SELECT * FROM products", function (err, res) {
+        if (err) throw err;
+        for (var i = 0; i < res.length; i++) {
+            quantities.push(res[i].stock_quantity);
+            prices.push(res[i].price);
+        }
+    })
+}
+
+function select() {
+    inStock();
+
+    inquirer
+        .prompt([
+            {
+                name: "action",
+                type: "rawlist",
+                message: "What would you like to do?",
+                choices: [
+                    "Display inventory",
+                    "Buy product",
+                    "Quit"
+                ]
+            }
+        ])
+        .then(function (answer) {
+            if (answer.action === "Buy product") {
+                // displayStock();
+                buyItem();
+            }
+            else if (answer.action === "Display inventory") {
+                displayStock();
+            } else {
+                connection.end();
+            }
+        });
+}
 
 function displayStock() {
     connection.query("SELECT * FROM products", function (err, res) {
         if (err) throw err;
-        console.log(" Product ID" + " | " + "Product name        " + " | " + "Price     " + " | ");
+        console.log("\r\n Product ID" + " | " + "Product name        " + " | " + "Price     " + " | ");
         console.log("------------------------------------------------");
         for (var i = 0; i < res.length; i++) {
             console.log(" " + res[i].item_id + spaces(res[i].item_id.toString(), 10) + " | " +
                 res[i].product_name + spaces(res[i].product_name.toString(), 20)
                 + " | " + res[i].price + spaces(res[i].price.toString(), 10) + " | ");
-            quantities.push(res[i].stock_quantity);
-            prices.push(res[i].price);
-            // console.log("Length: " + res[i].product_name.toString().length);
+            // quantities.push(res[i].stock_quantity);
+            // prices.push(res[i].price);
         }
-        // console.log(res);
-        buyItem();
+        console.log("\n");
+        select();
     });
 }
 
 function buyItem() {
-    // prompt for info about the item being put up for auction
-    console.log("What would you like to buy?");
+    console.log("\r");
     inquirer
         .prompt([
             {
@@ -65,29 +102,28 @@ function buyItem() {
             },
         ])
         .then(function (answer) {
-            // when finished prompting, insert a new item into the db with that info
             var new_quantity = quantities[answer.id - 1] - answer.quantity;
-            var answerQuontity = new_quantity.toString();
-            var answerID = answer.id.toString();
+            var stringNewQuontity = new_quantity.toString();
+            var stringID = answer.id.toString();
             var price = prices[answer.id - 1];
-            // console.log("here");
-            if ((quantities[answer.id - 1] - answer.quantity) >= 0) {
-                connection.query("UPDATE products SET stock_quantity = " + answerQuontity + " WHERE item_id = " +
-                    answerID + ";", function (err, results) {
+            // console.log(quantities[answer.id - 1] - answer.quantity);
+            console.log(stringID);
+            console.log(stringNewQuontity);
+
+            if (new_quantity >= 0) {
+                connection.query("UPDATE products SET stock_quantity = " + stringNewQuontity + " WHERE item_id = " +
+                    stringID + ";", function (err, results) {
                         if (err) throw err;
-                        console.log("Your total price: $" + price * answer.quantity);
+                        console.log("\r\n" + "Your total price: $" + price * answer.quantity + "\r\n");
+                        select();
                     });
             }
             else {
-                console.log("Incorrect");
+                console.log("\r\n" + "Insufficient quantity!" + "\r\n");
+                select();
             }
-            // console.log("here");
-            // console.log("new_quantity: " + new_quantity);
-            console.log(new_quantity);
-            // console.log("here");
+            // console.log(new_quantity);
         });
-    // displayStock();
-    // connection.end();
 }
 
 function spaces(column, width) {
