@@ -14,7 +14,6 @@ var connection = mysql.createConnection({
 connection.connect(function (err) {
     if (err) throw err;
     console.log("connected as id " + connection.threadId + "\r\n");
-    // inStock();
     select();
 });
 
@@ -25,12 +24,13 @@ function inStock() {
             quantities.push(res[i].stock_quantity);
             prices.push(res[i].price);
         }
-    })
+        console.log(quantities);
+        console.log(prices);
+    });
 }
 
 function select() {
     inStock();
-
     inquirer
         .prompt([
             {
@@ -47,6 +47,7 @@ function select() {
         .then(function (answer) {
             if (answer.action === "Buy product") {
                 // displayStock();
+                inStock();
                 buyItem();
             }
             else if (answer.action === "Display inventory") {
@@ -107,8 +108,8 @@ function buyItem() {
             var stringID = answer.id.toString();
             var price = prices[answer.id - 1];
             // console.log(quantities[answer.id - 1] - answer.quantity);
-            console.log(stringID);
-            console.log(stringNewQuontity);
+            console.log("ID" + stringID);
+            console.log("New Quontity: " + stringNewQuontity);
 
             if (new_quantity >= 0) {
                 connection.query("UPDATE products SET stock_quantity = " + stringNewQuontity + " WHERE item_id = " +
