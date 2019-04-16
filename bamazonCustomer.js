@@ -20,17 +20,17 @@ connection.connect(function (err) {
 function inStock() {
     connection.query("SELECT * FROM products", function (err, res) {
         if (err) throw err;
+        quantities = [];
+        prices = [];
         for (var i = 0; i < res.length; i++) {
             quantities.push(res[i].stock_quantity);
             prices.push(res[i].price);
         }
-        console.log(quantities);
-        console.log(prices);
     });
 }
 
 function select() {
-    inStock();
+    inStock();    
     inquirer
         .prompt([
             {
@@ -46,8 +46,6 @@ function select() {
         ])
         .then(function (answer) {
             if (answer.action === "Buy product") {
-                // displayStock();
-                inStock();
                 buyItem();
             }
             else if (answer.action === "Display inventory") {
@@ -67,8 +65,6 @@ function displayStock() {
             console.log(" " + res[i].item_id + spaces(res[i].item_id.toString(), 10) + " | " +
                 res[i].product_name + spaces(res[i].product_name.toString(), 20)
                 + " | " + res[i].price + spaces(res[i].price.toString(), 10) + " | ");
-            // quantities.push(res[i].stock_quantity);
-            // prices.push(res[i].price);
         }
         console.log("\n");
         select();
@@ -76,6 +72,7 @@ function displayStock() {
 }
 
 function buyItem() {
+    inStock();
     console.log("\r");
     inquirer
         .prompt([
@@ -107,7 +104,6 @@ function buyItem() {
             var stringNewQuontity = new_quantity.toString();
             var stringID = answer.id.toString();
             var price = prices[answer.id - 1];
-            // console.log(quantities[answer.id - 1] - answer.quantity);
             console.log("ID" + stringID);
             console.log("New Quontity: " + stringNewQuontity);
 
@@ -123,7 +119,6 @@ function buyItem() {
                 console.log("\r\n" + "Insufficient quantity!" + "\r\n");
                 select();
             }
-            // console.log(new_quantity);
         });
 }
 
