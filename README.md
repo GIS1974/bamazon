@@ -5,16 +5,18 @@ This program contacts product inventory database and displays the results includ
 The program was created in javascript using node.js, mysql and inquirer packages. Database was set up in MySQL Workbench.
 
 ## How it works
-To start the program open command line or Git Bash and enter command <node bamazonCustomer.js>.
+To start the program open command line or Git Bash and enter the command "node bamazonCustomer.js">.
 ![Initial view](/assets/images/screen1.PNG)
 
 User can use arrow buttons to chose on of three options:
-1. **Display inventory** 
+1. **Display inventory**
+
 If the user chooses display inventory, inventory is displayed as shown in the image below, and user is asked the same question "What would you like to do?".
 ![Display inventory](/assets/images/screen2.PNG)
 
-1. **Buy product** 
-If the user chooses buy product option, user is prompted for a unique product id to be entered as shown below.
+2. **Buy product**
+
+If user chooses buy product option, user is prompted for a unique product id to be entered as shown below.
 ![Buy product](/assets/images/screen3.PNG)
 
 If the user enters valid product id, the user is then asked to enter product quantity as shown below.
