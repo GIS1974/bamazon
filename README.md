@@ -5,7 +5,7 @@ This program contacts product inventory database and displays the results includ
 
 ## How it works
 To start the program open command line or Git Bash and enter command <node bamazonCustomer.js>.
-![Initial view](/assets/images/screen-1.PNG)
+![Initial view](/assets/images/screen1.PNG)
 
 
 LIRI uses these commands to retrieve data from APIs:
