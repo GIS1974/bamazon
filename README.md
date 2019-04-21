@@ -8,7 +8,8 @@ The program was created in javascript using node.js, mysql and inquirer packages
 To start the program open command line or Git Bash and enter the command "node bamazonCustomer.js".
 ![Initial view](/assets/images/screen1.PNG)
 
-User can use arrow buttons to chose on of three options:
+User can use arrow buttons to chose one of three options:
+
 **1. Display inventory**
 
 If the user chooses display inventory, inventory is displayed as shown in the image below, and user is asked the same question "What would you like to do?".
