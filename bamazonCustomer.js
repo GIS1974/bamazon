@@ -104,8 +104,8 @@ function buyItem() {
             var stringNewQuontity = new_quantity.toString();
             var stringID = answer.id.toString();
             var price = prices[answer.id - 1];
-            console.log("ID" + stringID);
-            console.log("New Quontity: " + stringNewQuontity);
+            // console.log("ID" + stringID);
+            // console.log("New Quontity: " + stringNewQuontity);
 
             if (new_quantity >= 0) {
                 connection.query("UPDATE products SET stock_quantity = " + stringNewQuontity + " WHERE item_id = " +
