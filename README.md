@@ -26,5 +26,6 @@ Afterwards, total product cost is displayed, database is updated, and user is ag
 ![Display total cost](/assets/images/screen5.PNG)
 
 3. **Quit**
+
 If the user chooses quit option, the program terminates as shown below.
 ![Quit](/assets/images/screen6.PNG)
